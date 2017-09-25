@@ -3,10 +3,7 @@ package HackerRank.Strings;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Problem name: Two Characters
@@ -37,20 +34,40 @@ public class TwoCharacters {
             for (Map.Entry m : frequency.entrySet()) {
                 wordFrequency.put((Integer) m.getValue(), (Character) m.getKey());
             }
+            ArrayList<Integer> keys = new ArrayList<Integer>(wordFrequency.keySet());
+
+            int result = 0;
+            for (int i = keys.size() - 1; i >= 0; i--) {
+                int key = keys.get(i);
+                if (wordFrequency.get(key - 1) != null) {
+                    result = calculateLength(wordFrequency.get(key), wordFrequency.get(key - 1), input);
+                }
+            }
+
+            System.out.println(result);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static String generateWord(char a, char b, int len) {
+    public static int calculateLength(char a, char b, String s) {
         String word = "";
-        for (int i = 1; i <= len; i++) {
-            if (i % 2 != 0) {
-                word += a;
-            } else {
-                word += b;
+        boolean check = false;
+        int len = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == a || s.charAt(i) == b) {
+                word += s.charAt(i);
+                len++;
+                System.out.println("Length: " + len); //todo remove
+                if ((len % 2 == 0 && word.charAt(len - 1) != a) || len % 2 != 0 && word.charAt(len - 1) != b) {
+                    len = 0;
+                    break;
+                }
             }
         }
-        return word;
+
+        return len;
     }
 }
