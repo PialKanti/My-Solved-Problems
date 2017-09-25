@@ -40,11 +40,11 @@ public class TwoCharacters {
             for (int i = keys.size() - 1; i >= 0; i--) {
                 int key = keys.get(i);
                 if (wordFrequency.get(key - 1) != null) {
-                    result = calculateLength(wordFrequency.get(key), wordFrequency.get(key - 1), input);
+                    result = maxLen(wordFrequency.get(key), wordFrequency.get(key - 1), input);
                 }
             }
 
-            System.out.println(result);
+            System.out.println("maxLen: " + result); //todo remove
 
 
         } catch (IOException e) {
@@ -52,7 +52,7 @@ public class TwoCharacters {
         }
     }
 
-    public static int calculateLength(char a, char b, String s) {
+    public static int maxLen(char a, char b, String s) {
         String word = "";
         boolean check = false;
         int len = 0;
@@ -60,8 +60,9 @@ public class TwoCharacters {
             if (s.charAt(i) == a || s.charAt(i) == b) {
                 word += s.charAt(i);
                 len++;
-                System.out.println("Length: " + len); //todo remove
-                if ((len % 2 == 0 && word.charAt(len - 1) != a) || len % 2 != 0 && word.charAt(len - 1) != b) {
+                System.out.println(len + " " + word); //todo remove
+                if ((len % 2 == 0 && word.charAt(len - 1) != b) || len % 2 != 0 && word.charAt(len - 1) != a) {
+                    System.out.println(word); //todo remove
                     len = 0;
                     break;
                 }
