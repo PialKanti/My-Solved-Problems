@@ -60,7 +60,6 @@ public class TwoCharacters {
             if (s.charAt(i) == a || s.charAt(i) == b) {
                 word += s.charAt(i);
                 len++;
-                System.out.println("Length: " + len); //todo remove
                 if ((len % 2 == 0 && word.charAt(len - 1) != a) || len % 2 != 0 && word.charAt(len - 1) != b) {
                     len = 0;
                     break;
