@@ -13,62 +13,94 @@ import java.util.*;
  * Time: 1:22 PM
  */
 public class TwoCharacters {
-    private static Map<Character, Integer> frequency;
-    private static Map<Integer, Character> wordFrequency;
+    private static Map<Character, Integer> frequency = new HashMap<>();
+    private static int[] wordFrequency;
 
     public static void main(String[] args) {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             int len = Integer.parseInt(br.readLine());
             String input = br.readLine();
-            frequency = new HashMap<>();
-            wordFrequency = new TreeMap<>();
-            for (int i = 0; i < input.length(); i++) {
-                if (frequency.get(input.charAt(i)) == null) {
-                    frequency.put(input.charAt(i), 1);
-                } else {
-                    int value = frequency.get(input.charAt(i));
-                    frequency.put(input.charAt(i), ++value);
+            if (input.length() > 1) {
+                for (int i = 0; i < input.length(); i++) {
+                    if (frequency.get(input.charAt(i)) == null) {
+                        frequency.put(input.charAt(i), 1);
+                    } else {
+                        int value = frequency.get(input.charAt(i));
+                        frequency.put(input.charAt(i), ++value);
+                    }
                 }
-            }
-            for (Map.Entry m : frequency.entrySet()) {
-                wordFrequency.put((Integer) m.getValue(), (Character) m.getKey());
-            }
-            ArrayList<Integer> keys = new ArrayList<Integer>(wordFrequency.keySet());
-
-            int result = 0;
-            for (int i = keys.size() - 1; i >= 0; i--) {
-                int key = keys.get(i);
-                if (wordFrequency.get(key - 1) != null) {
-                    result = maxLen(wordFrequency.get(key), wordFrequency.get(key - 1), input);
+                wordFrequency = new int[frequency.size()];
+                int count = 0;
+                for (Map.Entry m : frequency.entrySet()) {
+                    wordFrequency[count] = (int) m.getValue();
+                    count++;
                 }
+
+                for (int i = 0; i < wordFrequency.length; i++) {
+                    int maxIndex = i;
+                    for (int j = i + 1; j < wordFrequency.length; j++) {
+                        if (wordFrequency[j] > wordFrequency[maxIndex]) {
+                            maxIndex = j;
+                        }
+                    }
+                    int temp = wordFrequency[maxIndex];
+                    wordFrequency[maxIndex] = wordFrequency[i];
+                    wordFrequency[i] = temp;
+
+                }
+
+                char[] charArray = new char[wordFrequency.length];
+                for (int i = 0; i < wordFrequency.length; i++) {
+                    for (Map.Entry m : frequency.entrySet()) {
+                        if ((int) m.getValue() == wordFrequency[i]) {
+                            charArray[i] = (char) m.getKey();
+                        }
+                    }
+                }
+
+                int maxLen = 0;
+                for (int i = 0; i < charArray.length; i++) {
+                    for (int j = i + 1; j < charArray.length; j++) {
+                        if (isAlternate(charArray[i], charArray[j], input)) {
+                            int altLen = frequency.get(charArray[i]) + frequency.get(charArray[j]);
+                            maxLen = Math.max(altLen, maxLen);
+                        }
+                    }
+                }
+
+                System.out.println(maxLen);
+            } else {
+                System.out.println(0);
             }
-
-            System.out.println("maxLen: " + result); //todo remove
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static int maxLen(char a, char b, String s) {
-        String word = "";
-        boolean check = false;
-        int len = 0;
+    public static boolean isAlternate(char c1, char c2, String s) {
+        int count = 0;
+        char last = '\0';
         for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == a || s.charAt(i) == b) {
-                word += s.charAt(i);
-                len++;
-                System.out.println(len + " " + word); //todo remove
-                if ((len % 2 == 0 && word.charAt(len - 1) != b) || len % 2 != 0 && word.charAt(len - 1) != a) {
-                    System.out.println(word); //todo remove
-                    len = 0;
-                    break;
+            if (count == 0) {
+                if (s.charAt(i) == c1 || s.charAt(i) == c2) {
+                    count++;
+                    last = s.charAt(i);
+                }
+            } else if (count > 0) {
+                if (last == c1 && s.charAt(i) == c1) {
+                    return false;
+                } else if (last == c1 && s.charAt(i) == c2) {
+                    count++;
+                    last = s.charAt(i);
+                } else if (last == c2 && s.charAt(i) == c2) {
+                    return false;
+                } else if (last == c2 && s.charAt(i) == c1) {
+                    count++;
+                    last = s.charAt(i);
                 }
             }
         }
-
-        return len;
+        return true;
     }
 }
