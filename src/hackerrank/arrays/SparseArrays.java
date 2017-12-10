@@ -3,7 +3,7 @@
  * Date: Nov 28, 2017
  * Time: 1:18:53 PM
  */
-package HackerRank.Arrays;
+package hackerrank.arrays;
 
 import java.util.Scanner;
 

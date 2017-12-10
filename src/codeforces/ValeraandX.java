@@ -1,7 +1,7 @@
 /**
- * problem/255/A
+ * problem/404/A
  */
-package Codeforces.Code;
+package codeforces;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
-public class GregsWorkout {
+public class ValeraandX {
 	static class MyScanner {
 		BufferedReader br;
 		StringTokenizer st;
@@ -52,6 +52,16 @@ public class GregsWorkout {
 			return str;
 		}
 
+		public char nextChar() {
+			char c = '\0';
+			try {
+				c = (char) br.read();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return c;
+		}
+
 	}
 
 	public static void main(String[] args) {
@@ -59,29 +69,50 @@ public class GregsWorkout {
 		PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
 
 		int n = in.nextInt();
-		int chest = 0, bicep = 0, back = 0, temp;
-		int c = 1;
-		for (int i = 0; i < n; i++) {
-			temp = in.nextInt();
-			if (c % 3 == 1)
-				chest += temp;
-			else if (c % 3 == 2)
-				bicep += temp;
-			else if (c % 3 == 0)
-				back += temp;
-			c++;
+		int arrS = n - 1;
+		char a, b;
+		String[] arr = new String[n];
+		boolean check = false;
+
+		for (int i = 0; i <= arrS; i++) {
+			arr[i] = in.nextLine();
 		}
 
-		if (chest > bicep && chest > back)
-			out.println("chest");
-		else if (bicep > chest && bicep > back)
-			out.println("biceps");
-		else if (back > chest && back > bicep)
-			out.println("back");
+		a = arr[0].charAt(0);
+		b = arr[0].charAt(1);
+
+		if (a == b) {
+			out.println("NO");
+		} else {
+			for (int i = 0; i <= arrS; i++) {
+				String temp = arr[i];
+
+				for (int j = 0; j <= arrS; j++) {
+					if (j == i || j == (arrS - i)) {
+						if (temp.charAt(j) != a) {
+							check = true;
+							break;
+						}
+					} else {
+						if (temp.charAt(j) != b) {
+							check = true;
+							break;
+						}
+					}
+				}
+				if (check)
+					break;
+
+			}
+
+			if (!check)
+				out.println("YES");
+			else
+				out.println("NO");
+		}
 
 		out.flush();
 		out.close();
-
 	}
 
 }

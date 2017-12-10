@@ -1,7 +1,4 @@
-/**
- * problem/501/A
- */
-package Codeforces.Code;
+package codeforces;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -10,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
-public class Contest {
+public class PlayingwithDice {
 	static class MyScanner {
 		BufferedReader br;
 		StringTokenizer st;
@@ -52,41 +49,30 @@ public class Contest {
 			return str;
 		}
 
-		public char nextChar() {
-			char c = '\0';
-			try {
-				c = (char) br.read();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return c;
-		}
-
 	}
 
 	public static void main(String[] args) {
 		MyScanner in = new MyScanner();
 		PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
-
+		
 		int a = in.nextInt();
 		int b = in.nextInt();
-		int c = in.nextInt();
-		int d = in.nextInt();
-
-		int m = Math.max(((3 * a) / 10), (a - (a / 250) * c));
 		
-		int v = Math.max(((3 * b) / 10), (b - (b / 250) * d));
+		int aw = 0,dw = 0,bw = 0;
 		
-		if(m > v)
-			out.println("Misha");
-		else if(m < v)
-			out.println("Vasya");
-		else
-			out.println("Tie");
+		for(int i = 1;i<=6;i++){
+			if(Math.abs(a-i) < Math.abs(b-i))
+				aw++;
+			else if(Math.abs(a-i)== Math.abs(b-i))
+				dw++;
+			else
+				bw++;
+		}
+		
+		out.println(aw+" "+dw+" "+bw);
 		
 		out.flush();
 		out.close();
-
 	}
 
 }

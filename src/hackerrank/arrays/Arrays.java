@@ -1,9 +1,9 @@
-package HackerRank.Arrays;
+package hackerrank.arrays;
 
 import java.util.Scanner;
 
 /**
- * Problem name: Arrays-DS
+ * Problem name: arrays-DS
  * 
  * @author: Pial Kanti Samadder <pialkanti2012@gmail.com>
  * Date: Nov 15, 2017

@@ -1,7 +1,7 @@
 /**
- * problem/499/A
+ * problem/255/A
  */
-package Codeforces.Code;
+package codeforces;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
-public class Watchingamovie {
+public class GregsWorkout {
 	static class MyScanner {
 		BufferedReader br;
 		StringTokenizer st;
@@ -52,16 +52,6 @@ public class Watchingamovie {
 			return str;
 		}
 
-		public char nextChar() {
-			char c = '\0';
-			try {
-				c = (char) br.read();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return c;
-		}
-
 	}
 
 	public static void main(String[] args) {
@@ -69,22 +59,25 @@ public class Watchingamovie {
 		PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
 
 		int n = in.nextInt();
-		int x = in.nextInt();
-		int total = 0, currentMin = 1;
-
-		for (int i = 1; i <= n; i++) {
-			int l = in.nextInt();
-			int r = in.nextInt();
-			if (currentMin + x <= l) {
-				int fact = ((l - currentMin) / x) * x;
-				currentMin += fact;
-			}
-
-			total += (r - currentMin) + 1;
-			currentMin = r + 1;
+		int chest = 0, bicep = 0, back = 0, temp;
+		int c = 1;
+		for (int i = 0; i < n; i++) {
+			temp = in.nextInt();
+			if (c % 3 == 1)
+				chest += temp;
+			else if (c % 3 == 2)
+				bicep += temp;
+			else if (c % 3 == 0)
+				back += temp;
+			c++;
 		}
 
-		out.println(total);
+		if (chest > bicep && chest > back)
+			out.println("chest");
+		else if (bicep > chest && bicep > back)
+			out.println("biceps");
+		else if (back > chest && back > bicep)
+			out.println("back");
 
 		out.flush();
 		out.close();

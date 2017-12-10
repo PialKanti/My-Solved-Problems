@@ -1,7 +1,7 @@
 /**
  * problem/262/A
  */
-package Codeforces.Code;
+package codeforces;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

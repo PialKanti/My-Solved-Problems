@@ -1,18 +1,16 @@
 /**
- * problem/496/A 
+ * problem/499/A
  */
-package Codeforces.Code;
+package codeforces;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class MinimumDifficulty {
+public class Watchingamovie {
 	static class MyScanner {
 		BufferedReader br;
 		StringTokenizer st;
@@ -54,6 +52,16 @@ public class MinimumDifficulty {
 			return str;
 		}
 
+		public char nextChar() {
+			char c = '\0';
+			try {
+				c = (char) br.read();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return c;
+		}
+
 	}
 
 	public static void main(String[] args) {
@@ -61,42 +69,26 @@ public class MinimumDifficulty {
 		PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
 
 		int n = in.nextInt();
-		int[] ai = new int[n];
-		int[][] newAi = new int[n - 2][n - 1];
-		int temp;
+		int x = in.nextInt();
+		int total = 0, currentMin = 1;
 
-		for (int i = 0; i < n; i++) {
-			ai[i] = in.nextInt();
-		}
-
-		int re = 1;
-		for (int i = 0; i < n - 2; i++) {
-			int cnt = 0;
-			for (int j = 0; j < n; j++) {
-				if (j == re) {
-					continue;
-				} else {
-					newAi[i][cnt] = ai[j];
-					cnt++;
-				}
+		for (int i = 1; i <= n; i++) {
+			int l = in.nextInt();
+			int r = in.nextInt();
+			if (currentMin + x <= l) {
+				int fact = ((l - currentMin) / x) * x;
+				currentMin += fact;
 			}
-			re++;
+
+			total += (r - currentMin) + 1;
+			currentMin = r + 1;
 		}
 
-		int minDiff = 2000;
-		for (int i = 0; i < n - 2; i++) {
-			int maxDiff = 0;
-			for (int j = 0; j < n - 2; j++) {
-				temp = newAi[i][j + 1] - newAi[i][j];
-				maxDiff = Math.max(maxDiff, temp);
-			}
-			minDiff = Math.min(maxDiff, minDiff);
-		}
-
-		out.println(minDiff);
+		out.println(total);
 
 		out.flush();
 		out.close();
+
 	}
 
 }

@@ -1,7 +1,7 @@
 /**
- * problem/404/A
+ * problem/233/A
  */
-package Codeforces.Code;
+package codeforces;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
-public class ValeraandX {
+public class PerfectPermutation {
 	static class MyScanner {
 		BufferedReader br;
 		StringTokenizer st;
@@ -51,11 +51,11 @@ public class ValeraandX {
 			}
 			return str;
 		}
-
-		public char nextChar() {
+		
+		public char nextChar(){
 			char c = '\0';
 			try {
-				c = (char) br.read();
+				c = (char)br.read();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -67,52 +67,22 @@ public class ValeraandX {
 	public static void main(String[] args) {
 		MyScanner in = new MyScanner();
 		PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
-
+		
 		int n = in.nextInt();
-		int arrS = n - 1;
-		char a, b;
-		String[] arr = new String[n];
-		boolean check = false;
-
-		for (int i = 0; i <= arrS; i++) {
-			arr[i] = in.nextLine();
-		}
-
-		a = arr[0].charAt(0);
-		b = arr[0].charAt(1);
-
-		if (a == b) {
-			out.println("NO");
-		} else {
-			for (int i = 0; i <= arrS; i++) {
-				String temp = arr[i];
-
-				for (int j = 0; j <= arrS; j++) {
-					if (j == i || j == (arrS - i)) {
-						if (temp.charAt(j) != a) {
-							check = true;
-							break;
-						}
-					} else {
-						if (temp.charAt(j) != b) {
-							check = true;
-							break;
-						}
-					}
-				}
-				if (check)
-					break;
-
+		if(n%2 == 0){
+			for(int i=2;i<=n;i+=2){
+				if(i>2)
+					out.print(" "+i+" "+(i-1));
+				else
+					out.print(i+" "+(i-1));
 			}
-
-			if (!check)
-				out.println("YES");
-			else
-				out.println("NO");
+		}else{
+			out.println("-1");
 		}
-
+		
 		out.flush();
 		out.close();
+
 	}
 
 }

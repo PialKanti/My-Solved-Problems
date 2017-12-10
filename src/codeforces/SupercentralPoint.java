@@ -1,23 +1,17 @@
 /**
- * 
+ * problem/165/A 
  */
-package Codeforces.Code;
+package codeforces;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-/**
- * @author Pial
- *
- */
-public class CutRibbon {
-	public static int[] state = new int[4001];
-	public static int n, a, b, c;
-
+public class SupercentralPoint {
 	static class MyScanner {
 		BufferedReader br;
 		StringTokenizer st;
@@ -75,24 +69,63 @@ public class CutRibbon {
 		MyScanner in = new MyScanner();
 		PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
 
-		n = in.nextInt();
-		a = in.nextInt();
-		b = in.nextInt();
-		c = in.nextInt();
+		int n = in.nextInt();
+		int total = 0;
 
-		for (int i = 0; i < 4001; i++) {
-			state[i] = -1;
+		ArrayList<Point> points = new ArrayList<>();
+
+		for (int i = 0; i < n; i++) {
+			int x = in.nextInt();
+			int y = in.nextInt();
+			Point p = new Point(x, y);
+			points.add(p);
 		}
 
-		int min = Math.min(a, Math.min(b, c));
+		for (int i = 0; i < n; i++) {
+			int l = 0, r = 0, t = 0, b = 0;
+			Point p1 = points.get(i);
+			for (int j = 0; j < n; j++) {
+				if (j == i)
+					continue;
+				else {
+					Point p2 = points.get(j);
+					if (p1.x == p2.x) {
+						if (p1.y > p2.y)
+							b++;
+						else if (p1.y < p2.y)
+							t++;
+					} else if (p1.y == p2.y) {
+						if (p1.x > p2.x)
+							l++;
+						else if (p1.x < p2.x)
+							r++;
+					}
+				}
+			}
 
-		out.close();
+			if (l > 0 && r > 0 && t > 0 && b > 0)
+				total++;
+		}
+
+		out.println(total);
+		out.flush();
 		out.close();
 
 	}
-	
-	public static void maximumPieces(int n){
-		
+
+}
+
+class Point {
+	int x, y;
+
+	public Point(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	@Override
+	public String toString() {
+		return x + " " + y;
 	}
 
 }
