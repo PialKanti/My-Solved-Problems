@@ -55,7 +55,6 @@ class NodeTooFar {
                 level = new int[30];
                 // BFS
                 queue = new Queue(index.get(node));
-                queue.push(index.get(node));
                 visited[index.get(node)] = 1;
                 level[index.get(node)] = 0;
 
@@ -71,7 +70,6 @@ class NodeTooFar {
                                 }
                             }
                         }
-                        //queue.printList();
                     }
                 }
 
@@ -81,7 +79,6 @@ class NodeTooFar {
                         res++;
                     }
                 }
-                System.out.println();
                 System.out.println("Case " + testCase + ": " + ((index.size() - 1) - res) + " nodes not reachable from node " + node + " with TTL = " + ttl + ".");
             }
         }
@@ -102,6 +99,7 @@ class NodeTooFar {
 
         public Queue(int n) {
             root = new Node(n);
+            length = 1;
             current = root;
         }
 
