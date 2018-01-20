@@ -3,6 +3,7 @@ package uva;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -17,24 +18,26 @@ class NodeTooFar {
     static Map<Integer, Integer> index;
     static int[][] edge;
     static int[] visited;
-    static int count;
     static int[] level;
+    static PrintWriter pw;
 
     public static void main(String[] args) {
         try {
-            System.setIn(new FileInputStream(new File("E:\\Java\\JavaProgram\\My-Solved-Problems\\src\\input.txt")));
+            System.setIn(new FileInputStream(new File("input/input.txt")));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        try {
+            pw = new PrintWriter("output/output.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        int nc, root, ttl, testCase = 0;
         Scanner in = new Scanner(System.in);
-        int testCase = 0;
-        while (in.hasNextLine()) {
-            int nc = in.nextInt();
-            if (nc == 0)
-                break;
+        nc = in.nextInt();
+        while (nc != 0) {
             index = new HashMap<>();
             edge = new int[30][30];
-            count = 0;
             for (int i = 0; i < nc; i++) {
                 int v1 = in.nextInt();
                 int v2 = in.nextInt();
@@ -44,82 +47,101 @@ class NodeTooFar {
                 edge[i2][i1] = 1;
             }
 
+
             while (true) {
-                int node = in.nextInt();
-                int ttl = in.nextInt();
-                if (node == 0 && ttl == 0)
+                root = in.nextInt();
+                ttl = in.nextInt();
+                if (root == 0 && ttl == 0) {
                     break;
+                }
                 testCase++;
+                if (!index.containsKey(root)) {
+//                    System.out.println("Case " + testCase + ": " + index.size() + " nodes not reachable from node " + root + " with TTL = " + ttl + ".");
+                    pw.println("Case " + testCase + ": " + index.size() + " nodes not reachable from node " + root + " with TTL = " + ttl + ".");
+                    continue;
+                }
 
                 visited = new int[30];
                 level = new int[30];
                 // BFS
-                queue = new Queue(index.get(node));
-                visited[index.get(node)] = 1;
-                level[index.get(node)] = 0;
+                queue = new Queue();
+                queue.push(index.get(root));
+                visited[index.get(root)] = 1;
+                level[index.get(root)] = 0;
 
-                for (Node n = queue.root; n != null; n = n.next) {
-                    if (queue.length > 0) {
-                        int u = queue.pop();
-                        for (int i = 0; i < edge[u].length; i++) {
-                            if (edge[u][i] == 1) {
-                                if (visited[i] == 0) {
-                                    queue.push(i);
-                                    visited[i] = 1;
-                                    level[i] = level[u] + 1;
-                                }
-                            }
+                while (queue.size() > 0) {
+                    int node = queue.pop();
+                    for (int i = 0; i < edge[node].length; i++) {
+                        if (edge[node][i] == 1 && visited[i] == 0) {
+                            queue.push(i);
+                            visited[i] = 1;
+                            level[i] = level[node] + 1;
                         }
                     }
                 }
 
+                for (Map.Entry<Integer, Integer> m : index.entrySet()) {
+                    System.out.println(m.getKey() + " : " + m.getValue());
+                }
+                for (int i = 0; i < level.length; i++) {
+                    System.out.println(level[i]);
+                }
+
                 int res = 0;
                 for (int i = 0; i < level.length; i++) {
-                    if (level[i] > 0 && level[i] <= ttl) {
+                    if (level[i] > ttl) {
                         res++;
                     }
                 }
-                System.out.println("Case " + testCase + ": " + ((index.size() - 1) - res) + " nodes not reachable from node " + node + " with TTL = " + ttl + ".");
+
+                System.out.println(res);
+//                System.out.println("Case " + testCase + ": " + res + " nodes not reachable from node " + root + " with TTL = " + ttl + ".");
+                pw.println("Case " + testCase + ": " + res + " nodes not reachable from node " + root + " with TTL = " + ttl + ".");
             }
+            nc = in.nextInt();
         }
+
+        pw.close();
     }
 
     public static int indexOf(int key) {
         if (!index.containsKey(key)) {
-            index.put(key, count);
-            count++;
+            index.put(key, index.size());
         }
         return index.get(key);
     }
 
     static class Queue {
-        private Node root;
-        private Node current;
+        private Node front;
+        private Node end;
         private int length;
-
-        public Queue(int n) {
-            root = new Node(n);
-            length = 1;
-            current = root;
-        }
 
         public int push(int n) {
             Node node = new Node(n);
-            current.next = node;
-            current = current.next;
             length++;
-            return node.data;
+            if (front == null) {
+                front = node;
+                end = front;
+            } else {
+                end.next = node;
+                end = end.next;
+            }
+            return n;
         }
 
         public int pop() {
-            int n = root.data;
-            root = root.next;
+            int n = front.data;
+            front = front.next;
             length--;
             return n;
         }
 
+        public int size() {
+            return length;
+        }
+
         public void printList() {
-            Node n = root;
+            Node n = front;
             while (n != null) {
                 System.out.print(n.data + " ");
                 n = n.next;
