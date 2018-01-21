@@ -7,6 +7,8 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 /**
+ * Problem: 336 - A node too far
+ *
  * @author: Pial Kanti Samadder <pialkanti2012@gmail.com>
  * Date: 1/1/2018
  * Time: 9:04 PM
