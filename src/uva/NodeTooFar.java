@@ -1,12 +1,10 @@
 package uva;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 /**
  * @author: Pial Kanti Samadder <pialkanti2012@gmail.com>
@@ -19,23 +17,16 @@ class NodeTooFar {
     static int[][] edge;
     static int[] visited;
     static int[] level;
-    static PrintWriter pw;
 
     public static void main(String[] args) {
-        try {
-            System.setIn(new FileInputStream(new File("input/input.txt")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            pw = new PrintWriter("output/output.txt");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
         int nc, root, ttl, testCase = 0;
-        Scanner in = new Scanner(System.in);
-        nc = in.nextInt();
-        while (nc != 0) {
+        MyScanner in = new MyScanner();
+        PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
+
+        while (true) {
+            nc = in.nextInt();
+            if (nc == 0)
+                break;
             index = new HashMap<>();
             edge = new int[30][30];
             for (int i = 0; i < nc; i++) {
@@ -47,7 +38,7 @@ class NodeTooFar {
                 edge[i2][i1] = 1;
             }
 
-
+            int preNode = -1;
             while (true) {
                 root = in.nextInt();
                 ttl = in.nextInt();
@@ -56,52 +47,48 @@ class NodeTooFar {
                 }
                 testCase++;
                 if (!index.containsKey(root)) {
-//                    System.out.println("Case " + testCase + ": " + index.size() + " nodes not reachable from node " + root + " with TTL = " + ttl + ".");
-                    pw.println("Case " + testCase + ": " + index.size() + " nodes not reachable from node " + root + " with TTL = " + ttl + ".");
+                    out.println("Case " + testCase + ": " + index.size() + " nodes not reachable from node " + root + " with TTL = " + ttl + ".");
                     continue;
                 }
 
-                visited = new int[30];
-                level = new int[30];
-                // BFS
-                queue = new Queue();
-                queue.push(index.get(root));
-                visited[index.get(root)] = 1;
-                level[index.get(root)] = 0;
 
-                while (queue.size() > 0) {
-                    int node = queue.pop();
-                    for (int i = 0; i < edge[node].length; i++) {
-                        if (edge[node][i] == 1 && visited[i] == 0) {
-                            queue.push(i);
-                            visited[i] = 1;
-                            level[i] = level[node] + 1;
+                if (root != preNode) {
+                    visited = new int[30];
+                    level = new int[30];
+                    level = initialize(level);
+                    // BFS
+                    queue = new Queue();
+                    queue.push(index.get(root));
+                    visited[index.get(root)] = 1;
+                    level[index.get(root)] = 0;
+
+                    while (queue.size() > 0) {
+                        int node = queue.pop();
+                        for (int i = 0; i < edge[node].length; i++) {
+                            if (edge[node][i] == 1 && visited[i] == 0) {
+                                queue.push(i);
+                                visited[i] = 1;
+                                level[i] = level[node] + 1;
+                            }
                         }
                     }
                 }
 
-                for (Map.Entry<Integer, Integer> m : index.entrySet()) {
-                    System.out.println(m.getKey() + " : " + m.getValue());
-                }
+                int canVisit = 0;
                 for (int i = 0; i < level.length; i++) {
-                    System.out.println(level[i]);
-                }
-
-                int res = 0;
-                for (int i = 0; i < level.length; i++) {
-                    if (level[i] > ttl) {
-                        res++;
+                    if (level[i] <= ttl && level[i] > 0) {
+                        canVisit++;
                     }
                 }
 
-                System.out.println(res);
-//                System.out.println("Case " + testCase + ": " + res + " nodes not reachable from node " + root + " with TTL = " + ttl + ".");
-                pw.println("Case " + testCase + ": " + res + " nodes not reachable from node " + root + " with TTL = " + ttl + ".");
+                out.println("Case " + testCase + ": " + (index.size() - canVisit - 1) + " nodes not reachable from node " + root + " with TTL = " + ttl + ".");
+
+                preNode = root;
             }
-            nc = in.nextInt();
         }
 
-        pw.close();
+        out.flush();
+        out.close();
     }
 
     public static int indexOf(int key) {
@@ -109,6 +96,67 @@ class NodeTooFar {
             index.put(key, index.size());
         }
         return index.get(key);
+    }
+
+    public static int[] initialize(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = -1;
+        }
+
+        return arr;
+    }
+
+    static class MyScanner {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public MyScanner() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        public String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        public int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        public double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        public long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        public String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+
+        public char nextChar() {
+            char c = '\0';
+            try {
+                c = (char) br.read();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return c;
+        }
+
     }
 
     static class Queue {
