@@ -1,5 +1,5 @@
-/.idea/workspace.xml
-/out
-/bin
-/input/*
-/output/*
+.idea/workspace.xml
+out/**
+bin/**
+input/**
+output/**
