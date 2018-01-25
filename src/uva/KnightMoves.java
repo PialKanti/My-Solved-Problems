@@ -1,8 +1,6 @@
 package uva;
 
 import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -14,18 +12,13 @@ import java.util.Scanner;
  * Time: 3:47 PM
  */
 public class KnightMoves {
-    static final int[] fx = {1, 1, -1, -1};
-    static final int[] fy = {2, -2, -2, 2};
+    static final int[] fx = {1, 2, 2, 1, -1, -2, -2, -1};
+    static final int[] fy = {2, 1, -1, -2, -2, -1, 1, 2};
     static Queue queue;
     static int[][] visited;
     static int[][] cost;
 
     public static void main(String[] args) {
-        try {
-            System.setIn(new FileInputStream("input/input.txt"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
         Scanner in = new Scanner(System.in);
         PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
 
@@ -45,7 +38,7 @@ public class KnightMoves {
 
             while (queue.size() > 0) {
                 Node node = queue.pop();
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 8; i++) {
                     int nx = node.x + fx[i];
                     int ny = node.y + fy[i];
                     if ((nx >= 0 && nx <= 7) && (ny >= 0 && ny <= 7)) {
@@ -61,16 +54,14 @@ public class KnightMoves {
                     break;
                 }
             }
-
             out.println("To get from " + inp[0] + " to " + inp[1] + " takes " + cost[dest.x][dest.y] + " knight moves.");
         }
-
         out.flush();
         out.flush();
     }
 
     public static Node getNode(String num) {
-        int x = (int) num.charAt(1) - 48;
+        int x = (int) num.charAt(1) - 49;
         int y = (int) num.charAt(0) - 97;
         return new Node(x, y);
     }
