@@ -14,17 +14,26 @@ import java.util.*;
 public class WeShipCheap {
     static Queue queue;
     static Map<String, Integer> index;
+    static String[] indexArr;
     static int[][] edge;
     static int[] visited;
     static int[] parent;
-    static String route;
     static String source, dest;
     static boolean reachable;
+    static boolean isFirst;
 
     public static void main(String[] args) {
+        isFirst = true;
         Scanner in = new Scanner(System.in);
         PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
         while (in.hasNextLine()) {
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                String empty = in.nextLine();
+                out.println();
+
+            }
             String str = in.nextLine();
             index = new HashMap<>();
             edge = new int[700][700];
@@ -38,8 +47,17 @@ public class WeShipCheap {
                 edge[e1][e2] = 1;
                 edge[e2][e1] = 1;
             }
+            indexArr = new String[index.size()];
+            for (Map.Entry<String, Integer> m : index.entrySet()) {
+                indexArr[m.getValue()] = m.getKey();
+            }
+
             String query = in.nextLine();
             String[] q = query.split(" ");
+            if (!index.containsKey(q[0]) || !index.containsKey(q[1])) {
+                out.println("No route");
+                continue;
+            }
             source = q[0];
             dest = q[1];
 
@@ -66,9 +84,20 @@ public class WeShipCheap {
                     break;
                 }
             }
-
-
-            String empty = in.nextLine();
+            if (reachable) {
+                int d = getIndex(dest);
+                int p = parent[d];
+                int s = getIndex(source);
+                String route = indexArr[p] + " " + indexArr[d];
+                while (p != s) {
+                    d = p;
+                    p = parent[d];
+                    route = indexArr[p] + " " + indexArr[d] + "\n" + route;
+                }
+                out.println(route);
+            } else {
+                out.println("No route");
+            }
         }
 
         out.flush();
