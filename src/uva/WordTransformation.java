@@ -22,7 +22,6 @@ public class WordTransformation {
         for (int i = 0; i < num; i++) {
             Scanner scanner = new Scanner(System.in);
             while (scanner.hasNext()) {
-
             }
             scanner.close();
         }
