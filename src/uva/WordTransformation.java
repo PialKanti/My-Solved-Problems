@@ -22,6 +22,7 @@ public class WordTransformation {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
@@ -52,6 +53,7 @@ public class WordTransformation {
                         List<String> wordList = generateWords(node.data, dict);
                         for (String s : wordList) {
                             if (!visited.contains(s)) {
+                                queue.push(s);
                                 visited.add(s);
                                 level.put(s, level.get(node.data) + 1);
                             }
@@ -61,8 +63,9 @@ public class WordTransformation {
                         }
                     }
 
-                    out.println(testCase + " " + level.get(words[1]));
+                    System.out.println(testCase + " " + level.get(words[1]));
                     testCase = in.readLine();
+                    System.out.println(testCase);
                 }
             }
             in.close();
@@ -78,9 +81,9 @@ public class WordTransformation {
         StringBuilder builder = new StringBuilder(word);
         for (int i = 0; i < word.length(); i++) {
             for (int c = 97; c <= 122; c++) {
-                StringBuilder temp = builder;
+                StringBuilder temp = new StringBuilder(builder);
                 temp.replace(i, i + 1, String.valueOf((char) c));
-                if (dictionary.contains(temp.toString())) {
+                if (dictionary.contains(temp.toString()) && !temp.toString().equals(word)) {
                     words.add(temp.toString());
                 }
             }
