@@ -17,28 +17,28 @@ public class WordTransformation {
     static Map<String, Integer> level;
 
     public static void main(String[] args) {
-        try {
-            System.setIn(new FileInputStream("input/input.txt"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+        boolean first = true;
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
 
-            String number = in.readLine();
-            int num = Integer.parseInt(number);
+            int num = Integer.parseInt(in.readLine());
             String empty = in.readLine();
             for (int i = 0; i < num; i++) {
+                if (first) {
+                    first = false;
+                } else {
+                    System.out.println();
+                }
                 dict = new HashSet<>();
                 String word = in.readLine();
                 while (!word.equals("*")) {
                     dict.add(word);
                     word = in.readLine();
                 }
+
                 String testCase = in.readLine();
-                while (testCase != null) {
+                while (testCase != null && testCase.length() > 0) {
                     String[] words = testCase.split(" ");
                     queue = new Queue();
                     visited = new HashSet<>();
@@ -64,8 +64,8 @@ public class WordTransformation {
                     }
 
                     System.out.println(testCase + " " + level.get(words[1]));
+
                     testCase = in.readLine();
-                    System.out.println(testCase);
                 }
             }
             in.close();
@@ -115,6 +115,9 @@ public class WordTransformation {
             if (front == null) {
                 front = node;
                 end = front;
+            } else {
+                end.next = node;
+                end = end.next;
             }
             return node;
         }
